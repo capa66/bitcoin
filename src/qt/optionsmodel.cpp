@@ -159,6 +159,9 @@ void OptionsModel::Reset()
     QString dataDir = Intro::getDefaultDataDirectory();
     dataDir = settings.value("strDataDir", dataDir).toString();
 
+    // Remove rw config file
+    gArgs.EraseRWConfigFile(gArgs.GetArg("-confrw", BITCOIN_RW_CONF_FILENAME));
+
     // Remove all entries from our QSettings object
     settings.clear();
 
