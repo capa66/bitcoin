@@ -649,7 +649,8 @@ void ArgsManager::ReadConfigFile(const std::string& confPath)
 
 void ArgsManager::ReadRWConfigFile(const std::string& confPath)
 {
-    fs::ifstream streamRWConfig(GetRWConfigFile(confPath));
+    rwconf_path = GetRWConfigFile(confPath);
+    fs::ifstream streamRWConfig(rwconf_path);
     ReadConfigFile(streamRWConfig, &args_assigned_by_conf, NULL);
     args_assigned_by_conf.clear();
 }
@@ -814,9 +815,9 @@ void ModifyRWConfigFile(std::istream& streamIn, std::ostream& streamOut, const s
     }
 }
 
-void ArgsManager::ModifyRWConfigFile(const std::string& confPath, const std::map<std::string, std::string>& mapChangeSettings)
+void ArgsManager::ModifyRWConfigFile(const std::map<std::string, std::string>& mapChangeSettings)
 {
-    const fs::path rwconf_path = GetRWConfigFile(confPath);
+    assert(!rwconf_path.empty());
     fs::path rwconf_new_path = rwconf_path;
     rwconf_new_path += ".new";
     const std::string new_path_str = rwconf_new_path.string();
@@ -840,16 +841,16 @@ void ArgsManager::ModifyRWConfigFile(const std::string& confPath, const std::map
     }
 }
 
-void ArgsManager::ModifyRWConfigFile(const std::string& confPath, const std::string& strArg, const std::string& strNewValue)
+void ArgsManager::ModifyRWConfigFile(const std::string& strArg, const std::string& strNewValue)
 {
     std::map<std::string, std::string> mapChangeSettings;
     mapChangeSettings[strArg] = strNewValue;
-    ModifyRWConfigFile(confPath, mapChangeSettings);
+    ModifyRWConfigFile(mapChangeSettings);
 }
 
-void ArgsManager::EraseRWConfigFile(const std::string& confPath)
+void ArgsManager::EraseRWConfigFile()
 {
-    const fs::path rwconf_path = GetRWConfigFile(confPath);
+    assert(!rwconf_path.empty());
     if (!fs::exists(rwconf_path)) {
         return;
     }

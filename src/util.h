@@ -205,15 +205,16 @@ protected:
     std::map<std::string, std::vector<std::string>> mapMultiArgs;
 private:
     std::unordered_set<std::string> args_assigned_by_conf;
+    fs::path rwconf_path;
 
     void ReadConfigFile(fs::ifstream& streamConfig, std::unordered_set<std::string>* setAllowOverride, std::unordered_set<std::string>* setInitiallyAssigned);
 public:
     void ParseParameters(int argc, const char*const argv[]);
     void ReadConfigFile(const std::string& confPath);
     void ReadRWConfigFile(const std::string& confPath);
-    void ModifyRWConfigFile(const std::string& confPath, const std::map<std::string, std::string>& mapChangeSettings);
-    void ModifyRWConfigFile(const std::string& confPath, const std::string& strArg, const std::string& strNewValue);
-    void EraseRWConfigFile(const std::string& confPath);
+    void ModifyRWConfigFile(const std::map<std::string, std::string>& mapChangeSettings);
+    void ModifyRWConfigFile(const std::string& strArg, const std::string& strNewValue);
+    void EraseRWConfigFile();
 
     /**
      * Return a vector of strings of the given argument
